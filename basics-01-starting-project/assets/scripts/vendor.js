@@ -13,11 +13,19 @@ function outputResult(result, text) {
 	currentCalculationOutput.textContent = text;
 }
 
-let userValue = Number(userInput.value);
-let result = Number(currentResultOutput.textContent);
+// initialize the value of current
+let currentResult = 0;
 
-addBtn.onclick = add(result, userValue);
-
-function add(num1, num2) {
-	currentCalculationOutput.textContent = num1 + num2;
+// get the user number input
+function getuserNumber() {
+	return parseInt(userInput.value);
 }
+
+function add() {
+	const userNumber = getuserNumber();
+	const calcExcuted = `${currentResult} + ${userNumber}`;
+	currentResult += Number(userNumber);
+	outputResult(currentResult, calcExcuted);
+}
+
+addBtn.addEventListener("click", add);
