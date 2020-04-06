@@ -16,16 +16,72 @@ function outputResult(result, text) {
 // initialize the value of current
 let currentResult = 0;
 
+// Keep track of enetered values
+let logEntries = [];
+
 // get the user number input
 function getuserNumber() {
 	return parseInt(userInput.value);
 }
 
-function add() {
-	const userNumber = getuserNumber();
-	const calcExcuted = `${currentResult} + ${userNumber}`;
-	currentResult += Number(userNumber);
-	outputResult(currentResult, calcExcuted);
+// Set the User Output into page
+function setUserOutput(operator, userResult, calculation) {
+	const calcDescription = `${userResult} ${operator} ${calculation}`;
+	outputResult(userResult, calcDescription);
 }
 
+// Track log entries
+function trackOperations(operation, prevNumber, result, finalResult) {
+	let dataEntery = {
+		operation: operation,
+		prevNumber: prevNumber,
+		enteredNumber: result,
+		result: finalResult
+	};
+	logEntries.push(dataEntery);
+	console.log(logEntries);
+}
+
+// Addition
+function add() {
+	const userNumber = getuserNumber();
+	const initResult = currentResult;
+	currentResult = currentResult + userNumber;
+	setUserOutput("+", initResult, userNumber);
+	// Get info of operations
+	trackOperations("ADDITION", initResult, userNumber, currentResult);
+}
+
+// Subtraction
+function sub() {
+	const userNumber = getuserNumber();
+	const initResult = currentResult;
+	currentResult = currentResult - userNumber;
+	setUserOutput("-", initResult, userNumber);
+	// Get info of operations
+	trackOperations("SUBTRACTION", initResult, userNumber, currentResult);
+}
+
+// Multiplication
+function multiply() {
+	const userNumber = getuserNumber();
+	const initResult = currentResult;
+	currentResult = currentResult * userNumber;
+	setUserOutput("*", initResult, userNumber);
+	trackOperations("MULTIPLICATION", initResult, userNumber, currentResult);
+}
+
+// Division
+function divide() {
+	const userNumber = getuserNumber();
+	const initResult = currentResult;
+	currentResult = currentResult / userNumber;
+	setUserOutput("/", initResult, userNumber);
+	trackOperations("DIVISION", initResult, userNumber, currentResult);
+}
+
+// Trigger the Buttons
 addBtn.addEventListener("click", add);
+subtractBtn.addEventListener("click", sub);
+multiplyBtn.addEventListener("click", multiply);
+divideBtn.addEventListener("click", divide);
