@@ -48,7 +48,6 @@ function add() {
 	const initResult = currentResult;
 	currentResult = currentResult + userNumber;
 	setUserOutput("+", initResult, userNumber);
-	// Get info of operations
 	trackOperations("ADDITION", initResult, userNumber, currentResult);
 }
 
@@ -58,7 +57,6 @@ function sub() {
 	const initResult = currentResult;
 	currentResult = currentResult - userNumber;
 	setUserOutput("-", initResult, userNumber);
-	// Get info of operations
 	trackOperations("SUBTRACTION", initResult, userNumber, currentResult);
 }
 
@@ -80,8 +78,31 @@ function divide() {
 	trackOperations("DIVISION", initResult, userNumber, currentResult);
 }
 
+const calcActions = document.getElementById("calc-actions");
+calcActions.addEventListener("click", function handleMathOperator(mathBtn) {
+	const btnContent = mathBtn.target.textContent;
+	if (btnContent.length > 1) {
+		return;
+	} else {
+		handleMathBtns(btnContent);
+	}
+});
+
+// handle math buttons
+function handleMathBtns(mathOperator) {
+	if (mathOperator == "+") {
+		add();
+	} else if (mathOperator == "-") {
+		sub();
+	} else if (mathOperator == "*") {
+		multiply();
+	} else {
+		divide();
+	}
+}
+
 // Trigger the Buttons
-addBtn.addEventListener("click", add);
-subtractBtn.addEventListener("click", sub);
-multiplyBtn.addEventListener("click", multiply);
-divideBtn.addEventListener("click", divide);
+// addBtn.addEventListener("click", add);
+// subtractBtn.addEventListener("click", sub);
+// multiplyBtn.addEventListener("click", multiply);
+// divideBtn.addEventListener("click", divide);
