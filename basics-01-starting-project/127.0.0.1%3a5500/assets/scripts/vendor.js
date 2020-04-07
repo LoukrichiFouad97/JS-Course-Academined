@@ -21,7 +21,7 @@ let logEntries = [];
 
 // get the user number input
 function getuserNumber() {
-	return Number(userInput.value);
+	return parseInt(userInput.value);
 }
 
 // Set the User Output into page
@@ -79,7 +79,6 @@ function divide() {
 }
 
 const calcActions = document.getElementById("calc-actions");
-// Getting the math operators
 calcActions.addEventListener("click", function handleMathOperator(mathBtn) {
 	const btnContent = mathBtn.target.textContent;
 	if (btnContent.length > 1) {
@@ -97,7 +96,7 @@ function handleMathBtns(mathOperator) {
 		sub();
 	} else if (mathOperator == "*") {
 		multiply();
-	} else { // Obviousely is '/'
+	} else {
 		divide();
 	}
 }
