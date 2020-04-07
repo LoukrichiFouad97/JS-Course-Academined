@@ -100,9 +100,3 @@ function handleMathBtns(mathOperator) {
 		divide();
 	}
 }
-
-// Trigger the Buttons
-// addBtn.addEventListener("click", add);
-// subtractBtn.addEventListener("click", sub);
-// multiplyBtn.addEventListener("click", multiply);
-// divideBtn.addEventListener("click", divide);
