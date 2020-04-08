@@ -54,14 +54,18 @@ calcActions.addEventListener("click", function handleMathOperator(mathBtn) {
 
 // handle math buttons
 function handleMathBtns(mathOperator) {
-	if (mathOperator === "+" || mathOperator === "add") {
-		refactor("+");
-	} else if (mathOperator === "-" || mathOperator === "sub") {
-		refactor("-");
-	} else if (mathOperator === "*" || mathOperator === "multiply") {
-		refactor("*");
-	} else if (mathOperator === "/" || mathOperator === "devide") {
-		refactor("/");
+	try {
+		if (mathOperator === "+" || mathOperator === "add") {
+			refactor("+");
+		} else if (mathOperator === "-" || mathOperator === "sub") {
+			refactor("-");
+		} else if (mathOperator === "*" || mathOperator === "multiply") {
+			refactor("*");
+		} else if (mathOperator === "/" || mathOperator === "devide") {
+			refactor("/");
+		}
+	} catch (error) {
+		alert("that's not a math operator!!!");
 	}
 }
 
@@ -72,8 +76,13 @@ function refactor(operator) {
 	let mathOperators;
 	switch (operator) {
 		case "/":
-			mathOperators = "Divsion";
-			currentResult /= userNumber;
+			// prevent 0 division
+			if (userNumber) {
+				mathOperators = "Divsion";
+				currentResult /= userNumber;
+			} else {
+				return;
+			}
 			break;
 		case "+":
 			mathOperators = "Add";
