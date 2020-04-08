@@ -42,44 +42,7 @@ function trackOperations(operation, prevNumber, result, finalResult) {
 	console.log(logEntries);
 }
 
-// Addition
-function add() {
-	const userNumber = getuserNumber();
-	const initResult = currentResult;
-	currentResult = currentResult + userNumber;
-	setUserOutput("+", initResult, userNumber);
-	trackOperations("ADDITION", initResult, userNumber, currentResult);
-}
-
-// Subtraction
-function sub() {
-	const userNumber = getuserNumber();
-	const initResult = currentResult;
-	currentResult = currentResult - userNumber;
-	setUserOutput("-", initResult, userNumber);
-	trackOperations("SUBTRACTION", initResult, userNumber, currentResult);
-}
-
-// Multiplication
-function multiply() {
-	const userNumber = getuserNumber();
-	const initResult = currentResult;
-	currentResult = currentResult * userNumber;
-	setUserOutput("*", initResult, userNumber);
-	trackOperations("MULTIPLICATION", initResult, userNumber, currentResult);
-}
-
-// Division
-function divide() {
-	const userNumber = getuserNumber();
-	const initResult = currentResult;
-	currentResult = currentResult / userNumber;
-	setUserOutput("/", initResult, userNumber);
-	trackOperations("DIVISION", initResult, userNumber, currentResult);
-}
-
 const calcActions = document.getElementById("calc-actions");
-// Getting the math operators
 calcActions.addEventListener("click", function handleMathOperator(mathBtn) {
 	const btnContent = mathBtn.target.textContent;
 	if (btnContent.length > 1) {
@@ -92,12 +55,39 @@ calcActions.addEventListener("click", function handleMathOperator(mathBtn) {
 // handle math buttons
 function handleMathBtns(mathOperator) {
 	if (mathOperator == "+") {
-		add();
+		refactor("+");
 	} else if (mathOperator == "-") {
-		sub();
+		refactor("-");
 	} else if (mathOperator == "*") {
-		multiply();
-	} else { // Obviousely is '/'
-		divide();
+		refactor("*");
+	} else {
+		refactor("/");
+	}
+}
+
+// Handle math function
+function refactor(operator) {
+	const userNumber = getuserNumber();
+	const initResult = currentResult;
+	switch (operator) {
+		case "/":
+			currentResult = currentResult / userNumber;
+			setUserOutput(operator, initResult, userNumber);
+			trackOperations("DIVISION", initResult, userNumber, currentResult);
+			break;
+		case "+":
+			currentResult = currentResult + userNumber;
+			setUserOutput(operator, initResult, userNumber);
+			trackOperations("ADDITION", initResult, userNumber, currentResult);
+			break;
+		case "-":
+			currentResult = currentResult - userNumber;
+			setUserOutput(operator, initResult, userNumber);
+			trackOperations("SUBTRACTION", initResult, userNumber, currentResult);
+			break;
+		case "*":
+			currentResult = currentResult * userNumber;
+			setUserOutput(operator, initResult, userNumber);
+			trackOperations("MULTIPLICATION", initResult, userNumber, currentResult);
 	}
 }
