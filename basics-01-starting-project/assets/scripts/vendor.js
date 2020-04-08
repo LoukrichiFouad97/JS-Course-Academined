@@ -54,13 +54,13 @@ calcActions.addEventListener("click", function handleMathOperator(mathBtn) {
 
 // handle math buttons
 function handleMathBtns(mathOperator) {
-	if (mathOperator == "+") {
+	if (mathOperator === "+" || mathOperator === "add") {
 		refactor("+");
-	} else if (mathOperator == "-") {
+	} else if (mathOperator === "-" || mathOperator === "sub") {
 		refactor("-");
-	} else if (mathOperator == "*") {
+	} else if (mathOperator === "*" || mathOperator === "multiply") {
 		refactor("*");
-	} else {
+	} else if (mathOperator === "/" || mathOperator === "devide") {
 		refactor("/");
 	}
 }
@@ -72,28 +72,24 @@ function refactor(operator) {
 	let mathOperators;
 	switch (operator) {
 		case "/":
-			mathOperators = 'Divsion';
+			mathOperators = "Divsion";
 			currentResult /= userNumber;
-			trackOperations(mathOperators, initResult, userNumber, currentResult);
-			setUserOutput(operator, initResult, userNumber);
 			break;
 		case "+":
 			mathOperators = "Add";
 			currentResult += userNumber;
-			setUserOutput(operator, initResult, userNumber);
-			trackOperations(mathOperators, initResult, userNumber, currentResult);
 			break;
 		case "-":
 			mathOperators = "Subtract";
 			currentResult -= userNumber;
-			setUserOutput(operator, initResult, userNumber);
-			trackOperations(mathOperators, initResult, userNumber, currentResult);
 			break;
 		case "*":
 			mathOperators = "Muliply";
 			currentResult *= userNumber;
-			setUserOutput(operator, initResult, userNumber);
-			trackOperations(mathOperators, initResult, userNumber, currentResult);
 			break;
+		default:
+			return;
 	}
+	trackOperations(mathOperators, initResult, userNumber, currentResult);
+	setUserOutput(operator, initResult, userNumber);
 }
