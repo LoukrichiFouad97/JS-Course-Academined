@@ -69,25 +69,31 @@ function handleMathBtns(mathOperator) {
 function refactor(operator) {
 	const userNumber = getuserNumber();
 	const initResult = currentResult;
+	let mathOperators;
 	switch (operator) {
 		case "/":
-			currentResult = currentResult / userNumber;
+			mathOperators = 'Divsion';
+			currentResult /= userNumber;
+			trackOperations(mathOperators, initResult, userNumber, currentResult);
 			setUserOutput(operator, initResult, userNumber);
-			trackOperations("DIVISION", initResult, userNumber, currentResult);
 			break;
 		case "+":
-			currentResult = currentResult + userNumber;
+			mathOperators = "Add";
+			currentResult += userNumber;
 			setUserOutput(operator, initResult, userNumber);
-			trackOperations("ADDITION", initResult, userNumber, currentResult);
+			trackOperations(mathOperators, initResult, userNumber, currentResult);
 			break;
 		case "-":
-			currentResult = currentResult - userNumber;
+			mathOperators = "Subtract";
+			currentResult -= userNumber;
 			setUserOutput(operator, initResult, userNumber);
-			trackOperations("SUBTRACTION", initResult, userNumber, currentResult);
+			trackOperations(mathOperators, initResult, userNumber, currentResult);
 			break;
 		case "*":
-			currentResult = currentResult * userNumber;
+			mathOperators = "Muliply";
+			currentResult *= userNumber;
 			setUserOutput(operator, initResult, userNumber);
-			trackOperations("MULTIPLICATION", initResult, userNumber, currentResult);
+			trackOperations(mathOperators, initResult, userNumber, currentResult);
+			break;
 	}
 }
