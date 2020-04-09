@@ -1,12 +1,17 @@
+/* eslint-disable no-unused-vars */
+
+// Game Players
 const monsterHealthBar = document.getElementById('monster-health');
 const playerHealthBar = document.getElementById('player-health');
 const bonusLifeEl = document.getElementById('bonus-life');
 
+// Game Controls
 const attackBtn = document.getElementById('attack-btn');
 const strongAttackBtn = document.getElementById('strong-attack-btn');
 const healBtn = document.getElementById('heal-btn');
 const logBtn = document.getElementById('log-btn');
 
+// Set Players Health
 function adjustHealthBars(maxLife) {
   monsterHealthBar.max = maxLife;
   monsterHealthBar.value = maxLife;
