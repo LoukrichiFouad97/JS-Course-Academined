@@ -65,7 +65,7 @@ function handleMathBtns(mathOperator) {
 			refactor("/");
 		}
 	} catch (error) {
-		alert("that's not a math operator!!!");
+		alert(`that's not a math operator!!! ${error}`);
 	}
 }
 
