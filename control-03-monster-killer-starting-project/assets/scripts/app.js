@@ -12,23 +12,17 @@ let playerLife = fouadLife;
 
 adjustHealthBars(fouadLife);
 
-function attackHandler() {
-	const monsterDamage = dealMonsterDamage(ATTACK_VALUE);
-	const playerDamage = dealPlayerDamage(MONSTER_ATTACK_VALUE);
-	monsterLife -= monsterDamage;
-	playerLife -= playerDamage;
-	if (monsterLife <= 0 && playerLife > 0) {
-		console.log("monster loose");
-	} else if (monsterLife > 0 && playerLife <= 0) {
-		console.log("player loose");
-	} else if (monsterLife <= 0 && playerLife <= 0) {
-		console.log("you have a draw!");
+// handle attacks
+function handleAttack(attackMode) {
+	let attackStrength;
+	if (attackMode === "ATTACK") {
+		attackStrength = ATTACK_VALUE;
+	} else if (attackMode === "STRONG") {
+		attackStrength = STRONG_ATTACK_VALUE;
 	}
-}
 
-function strongAttackHandler() {
 	// Hit player life
-	const monsterDamage = dealMonsterDamage(STRONG_ATTACK_VALUE);
+	const monsterDamage = dealMonsterDamage(attackStrength);
 	const playerDamage = dealPlayerDamage(MONSTER_ATTACK_VALUE);
 
 	// Update players life on page
@@ -43,6 +37,16 @@ function strongAttackHandler() {
 	} else if (monsterLife <= 0 && playerLife <= 0) {
 		console.log("You have a draw!");
 	}
+}
+
+// Normal Attack
+function attackHandler() {
+	handleAttack("ATTACK");
+}
+
+// Strong Attack
+function strongAttackHandler() {
+	handleAttack("STRONG");
 }
 
 // Game Controls Buttons
