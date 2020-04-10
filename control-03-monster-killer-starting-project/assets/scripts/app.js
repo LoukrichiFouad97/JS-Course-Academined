@@ -6,7 +6,14 @@ const STRONG_ATTACK_VALUE = 20;
 const MONSTER_ATTACK_VALUE = 14;
 const HEAL_VALUE = 25;
 const MODE_ATTACK = "ATTACK";
-const MODE_STRING_ATTACK = "STRONG"
+const MODE_STRING_ATTACK = "STRONG";
+
+// Game Events
+const LOG_EVENT_PLAYER_ATTACK = "ATTACK";
+const LOG_EVENT_STRONG_PLAYER_ATTACK = "STRONG_ATTACK";
+const LOG_EVENT_MONSTER_ATTACK = "MONSTER";
+const LOG_EVENT_GAME_OVER = "GAME_OVER";
+const LOG_EVENT_PLAYER_HEAL = "PLAYER_HEAL";
 
 // Set the health numbers
 const userNumber = prompt("Max life for you and monster", "100");
@@ -39,8 +46,9 @@ function monsterHit() {
 	const newPlayerLife = playerLife;
 	const playerDamage = dealPlayerDamage(MONSTER_ATTACK_VALUE);
 	playerLife -= playerDamage;
+	logScores(LOG_EVENT_MONSTER_ATTACK, playerDamage, monsterLife, playerLife);
 
-	// Using the bonus life
+	// Using bonus life
 	if (playerLife <= 0 && hasBonusLife) {
 		hasBonusLife = false;
 		removeBonusLife();
@@ -52,10 +60,13 @@ function monsterHit() {
 	// Determine who is the winner
 	if (monsterLife > 0 && playerLife <= 0) {
 		console.log("Monster Win!");
+		logScores(LOG_EVENT_GAME_OVER, "monster Win", monsterLife, playerLife);
 	} else if (monsterLife <= 0 && playerLife > 0) {
 		console.log("You Win!");
+		logScores(LOG_EVENT_GAME_OVER, "You Win", monsterLife, playerLife);
 	} else if (monsterLife <= 0 && playerLife <= 0) {
 		console.log("You have a draw!");
+		logScores(LOG_EVENT_GAME_OVER, "It is a draw", monsterLife, playerLife);
 	}
 
 	// Reseting game
@@ -64,26 +75,67 @@ function monsterHit() {
 	}
 }
 
-function log() {
-	console.log(monsterLife, playerLife);
-	
+let logEntries = [];
+
+function logScores(event, value, monsterLife, playerLife) {
+	let gameInfo;
+	if (event === LOG_EVENT_PLAYER_ATTACK) {
+		gameInfo = {
+			event: event,
+			value: value,
+			monsterLife: monsterLife,
+			playerLife: playerLife,
+			target: "monster"
+		};
+	} else if (event === LOG_EVENT_STRONG_PLAYER_ATTACK) {
+		gameInfo = {
+			event: event,
+			value: value,
+			monsterLife: monsterLife,
+			playerLife: playerLife,
+			target: "monster"
+		};
+	} else if (event === LOG_EVENT_MONSTER_ATTACK) {
+		gameInfo = {
+			event: event,
+			value: value,
+			monsterLife: monsterLife,
+			playerLife: playerLife,
+			target: "player"
+		};
+	} else if (event === LOG_EVENT_GAME_OVER) {
+		gameInfo = {
+			event: event,
+			value: value,
+			monsterLife: monsterLife,
+			playerLife: playerLife
+		};
+	}
+
+	logEntries.push(gameInfo);
 }
 
 // handle attacks
 function handleAttack(attackMode) {
-	let attackStrength;
-	if (attackMode === MODE_ATTACK) {
-		attackStrength = ATTACK_VALUE;
-	} else if (attackMode === MODE_STRING_ATTACK) {
-		attackStrength = STRONG_ATTACK_VALUE;
-	}
+	const attackStrength =
+		attackMode === MODE_ATTACK ? ATTACK_VALUE : STRONG_ATTACK_VALUE;
+	const eventPlayer =
+		attackMode === MODE_ATTACK
+			? LOG_EVENT_PLAYER_ATTACK
+			: LOG_EVENT_STRONG_PLAYER_ATTACK;
+
+	// if (attackMode === MODE_ATTACK) {
+	// 	attackStrength = ATTACK_VALUE;
+	// 	eventPlayer = LOG_EVENT_PLAYER_ATTACK;
+	// } else if (attackMode === MODE_STRING_ATTACK) {
+	// 	attackStrength = STRONG_ATTACK_VALUE;
+	// 	eventPlayer = LOG_EVENT_STRONG_PLAYER_ATTACK;
+	// }
 
 	const monsterDamage = dealMonsterDamage(attackStrength);
 	monsterLife -= monsterDamage;
 	monsterHit();
-
-	// Log every thing 
-	log();
+	logScores(eventPlayer, monsterDamage, monsterLife, playerLife);
 }
 
 // Normal Attack
@@ -112,10 +164,16 @@ function healPlayer() {
 		}
 		playerLife += HEAL_VALUE;
 		monsterHit();
+		logScores(LOG_EVENT_PLAYER_HEAL, "HEAL", monsterLife, playerLife);
 	}
+}
+
+function logBattle() {
+	console.log(logEntries);
 }
 
 // Game Controls Buttons
 attackBtn.addEventListener("click", attackHandler);
 strongAttackBtn.addEventListener("click", strongAttackHandler);
 healBtn.addEventListener("click", healPlayer);
+logBtn.addEventListener("click", logBattle);
