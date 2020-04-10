@@ -14,19 +14,26 @@ let hasBonusLife = true;
 
 adjustHealthBars(fullLife);
 
-// monster hit
+// Reseting Game
+function reset() {
+	monsterLife = fullLife;
+	playerLife = fullLife;
+	resetGame(fullLife);
+}
+
+// Monster hit
 function monsterHit() {
 	const newPlayerLife = playerLife;
 	const playerDamage = dealPlayerDamage(MONSTER_ATTACK_VALUE);
 	playerLife -= playerDamage;
 
+	// Using the bonus life
 	if (playerLife <= 0 && hasBonusLife) {
 		hasBonusLife = false;
 		removeBonusLife();
 		playerLife = newPlayerLife;
 		setPlayerHealth(newPlayerLife);
-		console.log('bonus life has saved your life');
-		
+		console.log("bonus life has saved your life");
 	}
 
 	// Determine who is the winner
@@ -36,6 +43,11 @@ function monsterHit() {
 		console.log("You Win!");
 	} else if (monsterLife <= 0 && playerLife <= 0) {
 		console.log("You have a draw!");
+	}
+
+	// Reseting game
+	if (monsterLife <= 0 || playerLife <= 0) {
+		reset();
 	}
 }
 
