@@ -5,11 +5,24 @@ const ATTACK_VALUE = 10;
 const STRONG_ATTACK_VALUE = 20;
 const MONSTER_ATTACK_VALUE = 14;
 const HEAL_VALUE = 25;
+const MODE_ATTACK = "ATTACK";
+const MODE_STRING_ATTACK = "STRONG"
 
 // Set the health numbers
-let fullLife = 100; // set dynamically by the user
-let monsterLife = fullLife;
-let playerLife = fullLife;
+const userNumber = prompt("Max life for you and monster", "100");
+let fullLife = Number(userNumber);
+let monsterLife;
+let playerLife;
+
+if (isNaN(fullLife) || fullLife <= 20 || fullLife >= 100) {
+	fullLife = 100;
+	console.log(
+		"not valid value!  max life should be between 20 - 100. default 100"
+	);
+}
+
+monsterLife = fullLife;
+playerLife = fullLife;
 let hasBonusLife = true;
 
 adjustHealthBars(fullLife);
@@ -51,29 +64,36 @@ function monsterHit() {
 	}
 }
 
+function log() {
+	console.log(monsterLife, playerLife);
+	
+}
+
 // handle attacks
 function handleAttack(attackMode) {
 	let attackStrength;
-	if (attackMode === "ATTACK") {
+	if (attackMode === MODE_ATTACK) {
 		attackStrength = ATTACK_VALUE;
-	} else if (attackMode === "STRONG") {
+	} else if (attackMode === MODE_STRING_ATTACK) {
 		attackStrength = STRONG_ATTACK_VALUE;
 	}
 
 	const monsterDamage = dealMonsterDamage(attackStrength);
 	monsterLife -= monsterDamage;
-
 	monsterHit();
+
+	// Log every thing 
+	log();
 }
 
 // Normal Attack
 function attackHandler() {
-	handleAttack("ATTACK");
+	handleAttack(MODE_ATTACK);
 }
 
 // Strong Attack
 function strongAttackHandler() {
-	handleAttack("STRONG");
+	handleAttack(MODE_STRING_ATTACK);
 }
 
 // Heal the player
