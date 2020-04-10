@@ -78,38 +78,32 @@ function monsterHit() {
 let logEntries = [];
 
 function logScores(event, value, monsterLife, playerLife) {
-	let gameInfo;
-	if (event === LOG_EVENT_PLAYER_ATTACK) {
-		gameInfo = {
-			event: event,
-			value: value,
-			monsterLife: monsterLife,
-			playerLife: playerLife,
-			target: "monster"
-		};
-	} else if (event === LOG_EVENT_STRONG_PLAYER_ATTACK) {
-		gameInfo = {
-			event: event,
-			value: value,
-			monsterLife: monsterLife,
-			playerLife: playerLife,
-			target: "monster"
-		};
-	} else if (event === LOG_EVENT_MONSTER_ATTACK) {
-		gameInfo = {
-			event: event,
-			value: value,
-			monsterLife: monsterLife,
-			playerLife: playerLife,
-			target: "player"
-		};
-	} else if (event === LOG_EVENT_GAME_OVER) {
-		gameInfo = {
-			event: event,
-			value: value,
-			monsterLife: monsterLife,
-			playerLife: playerLife
-		};
+	let gameInfo = {
+		event: event,
+		value: value,
+		monsterLife: monsterLife,
+		playerLife: playerLife
+	};
+
+	switch (event) {
+		case LOG_EVENT_PLAYER_ATTACK:
+			gameInfo = {
+				target: "monster"
+			};
+			break;
+		case LOG_EVENT_STRONG_PLAYER_ATTACK:
+			gameInfo = {
+				target: "monster"
+			};
+			break;
+		case LOG_EVENT_MONSTER_ATTACK:
+			gameInfo = {
+				target: "player"
+			};
+			break;
+		case LOG_EVENT_GAME_OVER:
+			gameInfo = {};
+			break;
 	}
 
 	logEntries.push(gameInfo);
@@ -123,14 +117,6 @@ function handleAttack(attackMode) {
 		attackMode === MODE_ATTACK
 			? LOG_EVENT_PLAYER_ATTACK
 			: LOG_EVENT_STRONG_PLAYER_ATTACK;
-
-	// if (attackMode === MODE_ATTACK) {
-	// 	attackStrength = ATTACK_VALUE;
-	// 	eventPlayer = LOG_EVENT_PLAYER_ATTACK;
-	// } else if (attackMode === MODE_STRING_ATTACK) {
-	// 	attackStrength = STRONG_ATTACK_VALUE;
-	// 	eventPlayer = LOG_EVENT_STRONG_PLAYER_ATTACK;
-	// }
 
 	const monsterDamage = dealMonsterDamage(attackStrength);
 	monsterLife -= monsterDamage;
