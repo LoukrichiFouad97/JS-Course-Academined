@@ -17,16 +17,18 @@ const LOG_EVENT_PLAYER_HEAL = "PLAYER_HEAL";
 
 // Set the health numbers
 const userNumber = prompt("Max life for you and monster", "100");
-let fullLife = Number(userNumber);
 let monsterLife;
 let playerLife;
 
-if (isNaN(fullLife) || fullLife <= 20 || fullLife >= 100) {
-	fullLife = 100;
-	console.log(
-		"not valid value!  max life should be between 20 - 100. default 100"
-	);
+function getFullLifeNumber() {
+	let parsedInput = Number(userNumber);
+	if (isNaN(parsedInput) || parsedInput <= 20 || parsedInput > 100) {
+		throw "Invalid Input! Enter Number Please? "
+	}
+	return parsedInput
 }
+
+let fullLife = getFullLifeNumber();
 
 monsterLife = fullLife;
 playerLife = fullLife;
@@ -82,23 +84,23 @@ function logScores(event, value, monsterLife, playerLife) {
 		event: event,
 		value: value,
 		monsterLife: monsterLife,
-		playerLife: playerLife
+		playerLife: playerLife,
 	};
 
 	switch (event) {
 		case LOG_EVENT_PLAYER_ATTACK:
 			gameInfo = {
-				target: "monster"
+				target: "monster",
 			};
 			break;
 		case LOG_EVENT_STRONG_PLAYER_ATTACK:
 			gameInfo = {
-				target: "monster"
+				target: "monster",
 			};
 			break;
 		case LOG_EVENT_MONSTER_ATTACK:
 			gameInfo = {
-				target: "player"
+				target: "player",
 			};
 			break;
 		case LOG_EVENT_GAME_OVER:
