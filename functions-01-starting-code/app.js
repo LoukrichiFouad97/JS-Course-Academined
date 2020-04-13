@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const startGameBtn = document.getElementById("start-game-btn");
 
 // Game Choices
@@ -34,7 +35,7 @@ const getComputerChoice = () => {
 };
 
 // Determine the winner
-const determineWinner = function (playerChoice, computerChoice) {
+const determineWinner = (playerChoice, computerChoice) => {
 	if (playerChoice === computerChoice) {
 		console.log(DRAW);
 	} else if (
@@ -48,7 +49,8 @@ const determineWinner = function (playerChoice, computerChoice) {
 	}
 };
 
-startGameBtn.addEventListener("click", function () {
+// Start Game
+startGameBtn.addEventListener("click", () => {
 	if (gameIsRunning) {
 		return;
 	}
@@ -56,4 +58,14 @@ startGameBtn.addEventListener("click", function () {
 	const playerSelection = getUserChoice();
 	const computerSelection = getComputerChoice();
 	const winner = determineWinner(playerSelection, computerSelection);
+	let message = `You picked ${playerSelection}, Computer picked ${computerSelection}, therefor `;
+	if (playerSelection === computerSelection) {
+		message += DRAW;
+	} else if (winner === playerSelection) {
+		message += PLAYER_WINS;
+	} else {
+		message += COMPUTER_WINS;
+	}
+	alert(message);
+	gameIsRunning = false;
 });
