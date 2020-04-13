@@ -28,7 +28,13 @@ function getFullLifeNumber() {
 	return parsedInput
 }
 
-let fullLife = getFullLifeNumber();
+// Catching Errors
+let fullLife
+try {
+	fullLife = getFullLifeNumber();
+} catch (error) {
+	console.log(error.name);
+}
 
 monsterLife = fullLife;
 playerLife = fullLife;
@@ -81,8 +87,8 @@ let logEntries = [];
 
 function logScores(event, value, monsterLife, playerLife) {
 	let gameInfo = {
-		event: event,
-		value: value,
+		attcker: event,
+		hitValue: value,
 		monsterLife: monsterLife,
 		playerLife: playerLife,
 	};
@@ -161,6 +167,17 @@ function logBattle() {
 }
 
 // Game Controls Buttons
+const controls = document.getElementById("controls");
+controls.addEventListener('click', (btn) => {
+	const gameButtons = btn.target;
+	if (gameButtons.textContent.length > 1) {
+		return;
+	} else {
+		console.log(gameButtons.textContent);
+	}
+})
+
+
 attackBtn.addEventListener("click", attackHandler);
 strongAttackBtn.addEventListener("click", strongAttackHandler);
 healBtn.addEventListener("click", healPlayer);
