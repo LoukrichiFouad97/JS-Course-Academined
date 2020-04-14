@@ -16,7 +16,7 @@ const getUserChoice = () => {
 	const userChoice = prompt("ROCK, PAPER, SCISSORS", "").toUpperCase();
 	if (userChoice !== ROCK && userChoice !== PAPER && userChoice !== SCISSORS) {
 		alert(`Invalid Input! defalut is: ${DEFAULT_USER_CHOICE}`);
-		return DEFAULT_USER_CHOICE;
+		return;
 	} else {
 		return userChoice;
 	}
@@ -35,7 +35,10 @@ const getComputerChoice = () => {
 };
 
 // Determine the winner
-const determineWinner = (playerChoice, computerChoice) => {
+const determineWinner = (
+	computerChoice,
+	playerChoice = DEFAULT_USER_CHOICE
+) => {
 	if (playerChoice === computerChoice) {
 		console.log(DRAW);
 	} else if (
@@ -57,8 +60,14 @@ startGameBtn.addEventListener("click", () => {
 	console.log("Game is starting...");
 	const playerSelection = getUserChoice();
 	const computerSelection = getComputerChoice();
-	const winner = determineWinner(playerSelection, computerSelection);
-	let message = `You picked ${playerSelection}, Computer picked ${computerSelection}, therefor `;
+	let winner;
+	if (playerSelection) {
+		winner = determineWinner(computerSelection, playerSelection);
+	} else {
+		winner = determineWinner(computerSelection);
+	}
+
+	let message = `You picked ${playerSelection || DEFAULT_USER_CHOICE}, Computer picked ${computerSelection}, therefor `;
 	if (playerSelection === computerSelection) {
 		message += DRAW;
 	} else if (winner === playerSelection) {
