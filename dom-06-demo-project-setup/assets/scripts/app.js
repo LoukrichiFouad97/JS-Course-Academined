@@ -1,5 +1,8 @@
 // SELECTORS
 const addModal = document.getElementById("add-modal");
+const deleteModal = document.getElementById("delete-modal");
+const confirmDelModal = deleteModal.querySelector(".btn--danger");
+const cancelDelModal = deleteModal.querySelector(".btn--passive");
 const addModalBtn = document.getElementById("btn-add");
 const backDrop = document.getElementById("backdrop");
 const modalCancel = addModal.querySelector(".btn--passive");
@@ -15,9 +18,20 @@ const updateUI = () => {
 	}
 };
 
+const deleteMovie = (movie) => {
+	deleteModal.classList.add("visible");
+	confirmDelModal.addEventListener("click", () => {
+		removeMovieHandler(movie);
+		deleteModal.classList.remove("visible");
+	});
+	cancelDelModal.addEventListener("click", () => {
+		deleteModal.classList.remove("visible");
+	});
+};
+
 const removeMovieHandler = (movie) => {
-	movie.parentElement.removeChild(movie)
-}
+	movie.parentElement.removeChild(movie);
+};
 
 // Add new Movie to the UI
 const renderNewMovieElm = (title, imgURL, rating) => {
@@ -34,7 +48,7 @@ const renderNewMovieElm = (title, imgURL, rating) => {
     </div>
   `;
 	moviesList.appendChild(li);
-	li.addEventListener('click', removeMovieHandler.bind(this, li))
+	li.addEventListener("click", deleteMovie.bind(this, li));
 };
 
 const toggleBackDrop = () => {
