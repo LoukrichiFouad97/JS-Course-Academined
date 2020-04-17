@@ -5,10 +5,8 @@ const backDrop = document.getElementById("backdrop");
 const modalCancel = addModal.querySelector(".btn--passive");
 const modalAdd = modalCancel.nextElementSibling;
 const movieInfo = addModal.querySelectorAll("input");
-const movies = [];
 const entryText = document.getElementById("entry-text");
-const moviesList = document.getElementById("movie-list");
-const movie = document.createElement("li");
+const movies = [];
 
 // FUNCTIONS
 const updateUI = () => {
@@ -17,7 +15,27 @@ const updateUI = () => {
 	}
 };
 
-const 
+const removeMovieHandler = (movie) => {
+	movie.parentElement.removeChild(movie)
+}
+
+// Add new Movie to the UI
+const renderNewMovieElm = (title, imgURL, rating) => {
+	const moviesList = document.getElementById("movie-list");
+	const li = document.createElement("li");
+	li.classList.add("movie-element");
+	li.innerHTML = `
+    <div class= "movie-element__image">
+      <img src="${imgURL}" alt="${title}">
+    </div>
+    <div class= "movie-element__info">
+      <h2>${title}</h2>
+      <p>${rating}/5 Stars</p>
+    </div>
+  `;
+	moviesList.appendChild(li);
+	li.addEventListener('click', removeMovieHandler.bind(this, li))
+};
 
 const toggleBackDrop = () => {
 	backDrop.classList.toggle("visible");
@@ -65,10 +83,14 @@ const addMovieHandler = () => {
 	};
 	// store movies
 	movies.push(addedMovie);
-	// console.log(movies);
 	cancelMovieHandler();
 	clearMovieInfo();
 	updateUI();
+	renderNewMovieElm(
+		addedMovie.movieTitle,
+		addedMovie.movieImgUrl,
+		addedMovie.movieRating
+	);
 };
 
 // EVENTS
