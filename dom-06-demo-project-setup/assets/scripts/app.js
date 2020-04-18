@@ -18,6 +18,7 @@ const updateUI = () => {
 	}
 };
 
+
 const deleteMovie = (movie) => {
 	deleteModal.classList.add("visible");
 	confirmDelModal.addEventListener("click", () => {
@@ -27,6 +28,7 @@ const deleteMovie = (movie) => {
 	cancelDelModal.addEventListener("click", () => {
 		deleteModal.classList.remove("visible");
 	});
+	
 };
 
 const removeMovieHandler = (movie) => {
