@@ -14,6 +14,8 @@
  * reduce((previousValue,currentValue), initializeValue)
  * split(seperator) splits string to array
  * join(seperator) joins array to string
+ * ...Spread Operator pulls out array elements & copy them
+ * array destructuring const [var1, var2, ...rest] = array
  */
 
 // const numbers = [51, 2, 3, 164, 32, 5, 5];
@@ -22,8 +24,26 @@
 // console.log(numbers.sort((a, b) => a - b));
 // // sum all prices using reduce
 // console.log(numbers.reduce((a, b) => a + b, 0));
-const address = "Algeria;Msila;AinElMelh;28004";
-const splited = address.split(";");
-console.log(splited);
-const joined = splited.join(",");
-console.log(joined);
+
+/** SPREAD OPERATOR */
+// const person = [
+// 	{ name: "fouad", age: 22 },
+// 	{ name: "moh", age: 23 },
+// ];
+
+// const fullCopy = person.map((item) => {
+// 	return {
+// 		name: item.name,
+// 		age: item.age,
+// 	};
+// });
+
+// person[0].name = "fofo";
+
+// console.log(person);
+// console.log(fullCopy);
+
+const frontend = ["html", "css", "js", "css preprocessor", "js framework"];
+const [html, css, js, ...other] = frontend;
+
+console.log(html, css, js, other);
