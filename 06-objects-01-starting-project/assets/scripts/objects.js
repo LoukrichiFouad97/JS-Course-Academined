@@ -17,10 +17,12 @@ const addMovieToPage = (filterWord = "") => {
 		: movies.filter((movie) => movie.info.movieTitle.includes(filterWord));
 	filteredMovie.forEach((movie) => {
 		const newMovie = document.createElement("li");
-		let movieInfo = movie.info.movieTitle + " - ";
-		for (const key in movie.info) {
+		const { info } = movie;
+		const { movieTitle: title } = info;
+		let movieInfo = movieTitle + " - ";
+		for (const key in info) {
 			if (key !== "movieTitle") {
-				movieInfo += `${key}: ${movie.info[key]}`;
+				movieInfo += `${key}: ${info[key]}`;
 			}
 			newMovie.textContent = movieInfo;
 			movieList.append(newMovie);
