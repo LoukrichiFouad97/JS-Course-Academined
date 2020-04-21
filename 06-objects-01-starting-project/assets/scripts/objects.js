@@ -4,7 +4,7 @@ const searchBtn = document.getElementById("search-btn");
 const movies = [];
 
 // FUNCTIONS
-const addMovieToPage = () => {
+const addMovieToPage = (filterWord = "") => {
 	const movieList = document.getElementById("movie-list");
 	if (movies.length === 0) {
 		movieList.classList.remove("visible");
@@ -12,19 +12,19 @@ const addMovieToPage = () => {
 		movieList.classList.add("visible");
 	}
 	movieList.innerHTML = "";
-	movies.forEach((movie) => {
+	const filteredMovie = !filterWord
+		? movies
+		: movies.filter((movie) => movie.info.movieTitle.includes(filterWord));
+	filteredMovie.forEach((movie) => {
 		const newMovie = document.createElement("li");
-    let movieInfo = movie.info.movieTitle + " - ";
-    
+		let movieInfo = movie.info.movieTitle + " - ";
 		for (const key in movie.info) {
 			if (key !== "movieTitle") {
 				movieInfo += `${key}: ${movie.info[key]}`;
-      }
-      
-      newMovie.textContent = movieInfo;
+			}
+			newMovie.textContent = movieInfo;
 			movieList.append(newMovie);
-    }
-    
+		}
 	});
 };
 
@@ -50,5 +50,11 @@ const addMovieHandler = () => {
 	addMovieToPage();
 };
 
+const filterMoviesHandler = () => {
+	const filterMovie = document.getElementById("filter-title").value;
+	addMovieToPage(filterMovie);
+};
+
 // EVENTS
 addMovieBtn.addEventListener("click", addMovieHandler);
+searchBtn.addEventListener("click", filterMoviesHandler);
