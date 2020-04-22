@@ -17,9 +17,13 @@ const addMovieToPage = (filterWord = "") => {
 		: movies.filter((movie) => movie.info.movieTitle.includes(filterWord));
 	filteredMovie.forEach((movie) => {
 		const newMovie = document.createElement("li");
+
+		// Object Destructuring
 		const { info } = movie;
-		const { movieTitle: title } = info;
-		let movieInfo = movieTitle + " - ";
+		let { getFormatedTitle } = movie;
+		// getFormatedTitle = getFormatedTitle.bind(movie);
+
+		let movieInfo = getFormatedTitle.call(movie) + " - ";
 		for (const key in info) {
 			if (key !== "movieTitle") {
 				movieInfo += `${key}: ${info[key]}`;
@@ -42,10 +46,13 @@ const addMovieHandler = () => {
 		return;
 	}
 	const newMovie = {
-		id: Math.random(),
+		id: Math.random().toString(),
 		info: {
 			movieTitle,
 			[extraName]: extraValue,
+		},
+		getFormatedTitle() {
+			return this.info.movieTitle.toUpperCase();
 		},
 	};
 	movies.push(newMovie);
