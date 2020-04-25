@@ -31,12 +31,12 @@
 // 	{ name: "moh", age: 23 },
 // ];
 
-// const fullCopy = person.map((item) => {
-// 	return {
-// 		name: item.name,
-// 		age: item.age,
-// 	};
-// });
+const fullCopy = person.map((item) => {
+	return {
+		name: item.name,
+		age: item.age,
+  };
+});
 
 // person[0].name = "fofo";
 
