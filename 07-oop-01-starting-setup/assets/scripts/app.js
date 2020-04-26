@@ -8,10 +8,26 @@ class Product {
 }
 class ShoppingCart {
 	items = [];
+	
+	set cartItems(item) {
+		this.items = item;
+		this.totalItems.innerHTML = `
+		<h2>Total:\$${this.totalAmount.toFixed(2)}</h2>`;
+	}
+
+	// get total price of items in the cart
+	get totalAmount() {
+		const sum = this.items.reduce(
+			(prevVal, curItem) => prevVal + curItem.price,
+			0
+		);
+		return sum;
+	}
 
 	addProduct(product) {
-		this.items.push(product);
-		this.totalItems = `<h2>Total: \$${1}</h2>`;
+		const updatedItems = [...this.items];
+		updatedItems.push(product);
+		this.cartItems = updatedItems;
 	}
 
 	render() {
@@ -32,8 +48,7 @@ class ProductItem {
 	}
 
 	addToCart() {
-		console.log("added to cart...");
-		console.log(this.product);
+		App.addProductToCart(this.product);
 	}
 
 	render() {
@@ -82,8 +97,8 @@ class Shop {
 		const prodHooks = document.getElementById("app");
 		const productList = new ProductList();
 		const prodList = productList.render();
-		const shopCart = new ShoppingCart();
-		const cart = shopCart.render();
+		this.shopCart = new ShoppingCart();
+		const cart = this.shopCart.render();
 
 		prodHooks.appendChild(cart);
 		prodHooks.appendChild(prodList);
@@ -91,10 +106,17 @@ class Shop {
 }
 
 class App {
+	static cart;
+
 	static init() {
 		const shop = new Shop();
 		shop.render();
+		this.cart = shop.shopCart;
+	}
+
+	static addProductToCart(product) {
+		this.cart.addProduct(product);
 	}
 }
 
-App.init()
+App.init();
