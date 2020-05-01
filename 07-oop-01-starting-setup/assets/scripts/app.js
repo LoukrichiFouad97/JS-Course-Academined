@@ -1,117 +1,123 @@
+// creates new product
 class Product {
-	constructor(title, price, desc, imgUrl) {
+	constructor(title, imgUrl, price, desc) {
 		this.title = title;
+		this.imageUrl = imgUrl;
 		this.price = price;
 		this.description = desc;
-		this.imageUrl = imgUrl;
-	}
-}
-class ShoppingCart {
-	items = [];
-	
-	set cartItems(item) {
-		this.items = item;
-		this.totalItems.innerHTML = `
-		<h2>Total:\$${this.totalAmount.toFixed(2)}</h2>`;
-	}
-
-	// get total price of items in the cart
-	get totalAmount() {
-		const sum = this.items.reduce(
-			(prevVal, curItem) => prevVal + curItem.price,
-			0
-		);
-		return sum;
-	}
-
-	addProduct(product) {
-		const updatedItems = [...this.items];
-		updatedItems.push(product);
-		this.cartItems = updatedItems;
-	}
-
-	render() {
-		const cartEl = document.createElement("section");
-		cartEl.className = "cart";
-		cartEl.innerHTML = `
-			<h2>Total: \$${0}</h2>
-			<button>Order Now!</button>
-		`;
-		this.totalItems = cartEl.querySelector("h2");
-		return cartEl;
 	}
 }
 
+// Add Product Item
 class ProductItem {
 	constructor(product) {
 		this.product = product;
 	}
 
 	addToCart() {
+		console.log("adding to cart...");
+		console.log(this.product);
 		App.addProductToCart(this.product);
 	}
 
 	render() {
 		const prodEl = document.createElement("li");
-		prodEl.setAttribute("class", "product-item");
+		prodEl.classList.add("product-item");
+		const { product } = this;
 		prodEl.innerHTML = `
-        <div>
-          <img src="${this.product.imageUrl}" alt="${this.product.title}" >
-          <div class="product-item__content">
-            <h2>${this.product.title}</h2>
-            <h3>${this.product.price}</h3>
-            <p>${this.product.description}</p>
-            <button>Add to cart</button>
-          </div>
-        </div>
-      `;
-
-		const addToCart = prodEl.querySelector("button");
-		addToCart.addEventListener("click", this.addToCart.bind(this));
+				<img src='${product.imageUrl}' alt='${product.title}'>
+				<div class='product-item__content'>
+					<h2>${product.title}</h2>
+					<h3>${product.price}</h3>
+					<p>${product.description}</p>
+					<button>Add to cart</button>
+				</div>
+			`;
+		const addCartBtn = prodEl.querySelector("button");
+		addCartBtn.addEventListener("click", this.addToCart.bind(this));
 		return prodEl;
 	}
 }
 
+class ShoppingCart {
+	items = [];
+
+	// update Total amount
+	addProduct(product) {
+		const { items } = this;
+
+		items.push(Product);
+		this.totalAmount.innerHTML = `<h2>\$${2}</h2>`;
+	}
+
+	// add shopping cart UI
+	render() {
+		const cartItem = document.createElement("section");
+		cartItem.classList.add("cart");
+		cartItem.innerHTML = `
+			<h2>\$${0}</h2>
+			<button>Order Now</button>
+		`;
+		this.totalAmount = cartItem.querySelector("h2");
+		return cartItem;
+	}
+}
+
 class ProductList {
+	// create new products
 	products = [
-		new Product("pillow", 19.99, "A Soft pillow", "http://placehold.it/200/10"),
-		new Product("A Carpet", 109.99, "A carpet", "http://placehold.it/200/52"),
-		new Product("A Carpet", 109.99, "A carpet", "http://placehold.it/200/250"),
+		new Product("Pillow", "http://placehold.it/200/55", 19.99, "Pillow"),
+		new Product("Carpet", "http://placehold.it/200/50", 89.99, "Carpet"),
 	];
 
 	render() {
+		// add product list
 		const prodList = document.createElement("ul");
-		prodList.setAttribute("class", "product-list");
+		prodList.classList.add("product-list");
 
-		this.products.forEach((prod) => {
+		// add product item
+		const { products } = this;
+		for (const prod of products) {
 			const productItem = new ProductItem(prod);
 			const prodEl = productItem.render();
 			prodList.appendChild(prodEl);
-		});
+		}
 		return prodList;
 	}
 }
 
 class Shop {
 	render() {
-		const prodHooks = document.getElementById("app");
+		const productHook = document.getElementById("app");
+		/*
+			shop = {
+				cart: new ShoppingCart()
+			}
+		*/
+		// add the shopping card to the page
+		this.cart = new ShoppingCart();
+		const shopCart = this.cart.render();
+		productHook.appendChild(shopCart);
+
+		// add Product to the page
 		const productList = new ProductList();
 		const prodList = productList.render();
-		this.shopCart = new ShoppingCart();
-		const cart = this.shopCart.render();
-
-		prodHooks.appendChild(cart);
-		prodHooks.appendChild(prodList);
+		productHook.appendChild(prodList);
 	}
 }
 
 class App {
+	/*
+		App = {
+			cart: shop.cart
+		}
+	*/
 	static cart;
-
+	
 	static init() {
 		const shop = new Shop();
 		shop.render();
-		this.cart = shop.shopCart;
+		this.cart = shop.cart;
 	}
 
 	static addProductToCart(product) {
