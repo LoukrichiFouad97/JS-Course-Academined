@@ -17,9 +17,11 @@ class ElementAttribute {
 
 // Utility Component
 class Component {
-	constructor(ElemHookId) {
+	constructor(ElemHookId, renderHookId = true) {
 		this.elementId = ElemHookId;
-		this.render();
+		if (renderHookId) {
+			this.render();
+		}
 	}
 	render() {}
 
@@ -41,8 +43,9 @@ class Component {
 // Add Product Item
 class ProductItem extends Component {
 	constructor(product, elementId) {
-		super(elementId);
+		super(elementId, false);
 		this.product = product;
+		this.render();
 	}
 
 	addToCart() {
@@ -90,6 +93,11 @@ class ShoppingCart extends Component {
 		super(elementId);
 	}
 
+	buttonOrder() {
+		console.log("Ordering...");
+		console.log(this.items);
+	}
+
 	// add shopping cart UI
 	render() {
 		const cartItem = this.createRootElement("section", "cart");
@@ -97,6 +105,9 @@ class ShoppingCart extends Component {
 			<h2>\$${0}</h2>
 			<button>Order Now</button>
 		`;
+		const orderBtn = cartItem.querySelector("button");
+		orderBtn.addEventListener("click", () => this.buttonOrder());
+
 		this.totalAmount = cartItem.querySelector("h2");
 	}
 }
@@ -114,7 +125,7 @@ class ProductList extends Component {
 			new Product("Pillow", "http://placehold.it/200/55", 19.99, "Pillow"),
 			new Product("Carpet", "http://placehold.it/200/50", 89.99, "Carpet"),
 		];
-		this.renderProduct()
+		this.renderProduct();
 	}
 
 	renderProduct() {
