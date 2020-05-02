@@ -8,21 +8,50 @@ class Product {
 	}
 }
 
+class ElementAttribute {
+	constructor(attrName, attrValue) {
+		this.name = attrName;
+		this.value = attrValue;
+	}
+}
+
+// Utility Component
+class Component {
+	constructor(ElemHookId) {
+		this.elementId = ElemHookId;
+		this.render();
+	}
+	render() {}
+
+	createRootElement(tag, cssClass, attributes) {
+		const rootElement = document.createElement(tag);
+		if (cssClass) rootElement.className = cssClass;
+
+		if (attributes && attributes > 0) {
+			attributes.forEach((attr) => {
+				rootElement.setAttribute(attr.name, attr.value);
+			});
+		}
+
+		document.getElementById(this.elementId).appendChild(rootElement);
+		return rootElement;
+	}
+}
+
 // Add Product Item
-class ProductItem {
-	constructor(product) {
+class ProductItem extends Component {
+	constructor(product, elementId) {
+		super(elementId);
 		this.product = product;
 	}
 
 	addToCart() {
-		console.log("adding to cart...");
-		console.log(this.product);
 		App.addProductToCart(this.product);
 	}
 
 	render() {
-		const prodEl = document.createElement("li");
-		prodEl.classList.add("product-item");
+		const prodEl = this.createRootElement("li", "product-tem");
+
 		const { product } = this;
 		prodEl.innerHTML = `
 				<img src='${product.imageUrl}' alt='${product.title}'>
@@ -35,88 +64,97 @@ class ProductItem {
 			`;
 		const addCartBtn = prodEl.querySelector("button");
 		addCartBtn.addEventListener("click", this.addToCart.bind(this));
-		return prodEl;
 	}
 }
 
-class ShoppingCart {
+class ShoppingCart extends Component {
 	items = [];
+
+	set addItem(product) {
+		this.items = product;
+		this.totalAmount.innerHTML = `<h2>\$${this.addedItems.toFixed(2)}</h2>`;
+	}
+
+	get addedItems() {
+		return this.items.reduce((prev, curr) => prev + curr.price, 0);
+	}
 
 	// update Total amount
 	addProduct(product) {
-		const { items } = this;
+		const updatedItems = [...this.items];
+		updatedItems.push(product);
+		this.addItem = updatedItems;
+	}
 
-		items.push(Product);
-		this.totalAmount.innerHTML = `<h2>\$${2}</h2>`;
+	constructor(elementId) {
+		super(elementId);
 	}
 
 	// add shopping cart UI
 	render() {
-		const cartItem = document.createElement("section");
-		cartItem.classList.add("cart");
+		const cartItem = this.createRootElement("section", "cart");
 		cartItem.innerHTML = `
 			<h2>\$${0}</h2>
 			<button>Order Now</button>
 		`;
 		this.totalAmount = cartItem.querySelector("h2");
-		return cartItem;
 	}
 }
 
-class ProductList {
-	// create new products
-	products = [
-		new Product("Pillow", "http://placehold.it/200/55", 19.99, "Pillow"),
-		new Product("Carpet", "http://placehold.it/200/50", 89.99, "Carpet"),
-	];
+class ProductList extends Component {
+	products = [];
+	constructor(elementId) {
+		super(elementId);
+		this.fetchProduct();
+	}
 
+	// create new products
+	fetchProduct() {
+		this.products = [
+			new Product("Pillow", "http://placehold.it/200/55", 19.99, "Pillow"),
+			new Product("Carpet", "http://placehold.it/200/50", 89.99, "Carpet"),
+		];
+		this.renderProduct()
+	}
+
+	renderProduct() {
+		for (const prod of this.products) {
+			new ProductItem(prod, "product-list");
+		}
+	}
 	render() {
 		// add product list
-		const prodList = document.createElement("ul");
-		prodList.classList.add("product-list");
+		const prodlist = this.createRootElement("ul", "product-list");
+		prodlist.id = "product-list";
 
 		// add product item
 		const { products } = this;
-		for (const prod of products) {
-			const productItem = new ProductItem(prod);
-			const prodEl = productItem.render();
-			prodList.appendChild(prodEl);
+		if (products && products.length > 0) {
+			this.renderProduct();
 		}
-		return prodList;
 	}
 }
 
+// create the UI
 class Shop {
+	constructor() {
+		this.render();
+	}
+	cart;
 	render() {
-		const productHook = document.getElementById("app");
-		/*
-			shop = {
-				cart: new ShoppingCart()
-			}
-		*/
 		// add the shopping card to the page
-		this.cart = new ShoppingCart();
-		const shopCart = this.cart.render();
-		productHook.appendChild(shopCart);
+		this.cart = new ShoppingCart("app");
 
 		// add Product to the page
-		const productList = new ProductList();
-		const prodList = productList.render();
-		productHook.appendChild(prodList);
+		new ProductList("app");
 	}
 }
 
+// Initialize the app
 class App {
-	/*
-		App = {
-			cart: shop.cart
-		}
-	*/
 	static cart;
-	
 	static init() {
 		const shop = new Shop();
-		shop.render();
 		this.cart = shop.cart;
 	}
 
